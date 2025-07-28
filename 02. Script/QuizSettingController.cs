@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+
 [System.Serializable]
 public class Quiz
 {
@@ -13,13 +14,11 @@ public class Quiz
     public string correct_reaction;
     public string wrong_reaction;
 }
+
 public class QuizSettingController : MonoBehaviour
 {
     [Header("Quiz 문제 및 정답 연결")] public List<Quiz> quizList = new List<Quiz>();
-
-    [SerializeField] private GameObject QuizStart; //퀴즈 시작
-    [SerializeField] private GameObject QuizGroup; //퀴즈 문제
-    [SerializeField] private GameObject QuizEnd; //요약정리
+    [SerializeField] private GameObject QuizEnd; // 아이콘
     [SerializeField] private Transform quizEndIcon; // 회전할 아이콘
     [SerializeField] private float startSpeed = 1440f; // 시작 각속도 (초당 1440도 = 4바퀴/초)
     [SerializeField] private float deceleration = 720f; // 감속도 (초당 얼마씩 속도를 줄일지)
@@ -30,6 +29,10 @@ public class QuizSettingController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI QuestionNumText;
     [SerializeField] private Button[] choiceButtons;
     [SerializeField] private Button nextButton;
+
+    private int wrongTryCount = 0; // 오답 횟수 추적
+    private Color defaultButtonColor; // 초기 버튼 색상 저장용
+
 
 // QuizSettingController 안 Start() 같은 곳에서 초기 세팅 예시
     void Awake()
@@ -198,32 +201,113 @@ public class QuizSettingController : MonoBehaviour
 
     public void SetQuestion(int currentQuiz)
     {
+        wrongTryCount = 0;
+
         foreach (var btn in choiceButtons)
         {
             btn.onClick.RemoveAllListeners();
+            btn.interactable = true;
+
+            // 버튼 색상 초기화 (처음 한 번만 저장해둠)
+            if (defaultButtonColor == default(Color))
+                defaultButtonColor = btn.image.color;
+
+            btn.image.color = defaultButtonColor; // 색상 초기화
         }
 
-        nextButton.interactable = false; //다음으로 가기 버튼 비활성화
+        nextButton.interactable = false;
         QuestionText.text = quizList[currentQuiz].question;
         QuestionNumText.text = $"{currentQuiz + 1}/{quizList.Count}";
         HintText.text = "";
-        //선택지 텍스트 입력
+
         for (int i = 0; i < choiceButtons.Length; i++)
         {
-            choiceButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text
-                = quizList[currentQuiz].choice[i];
-            if (i.Equals(quizList[currentQuiz].answerNumber))
+            int index = i;
+            choiceButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                quizList[currentQuiz].choice[i];
+
+            choiceButtons[i].onClick.AddListener(() =>
             {
-                choiceButtons[i].onClick.AddListener(OnClick_CorrectReaction);
-            }
-            else
-            {
-                choiceButtons[i].onClick.AddListener(OnClick_WrongReaction);
-            }
+                if (index == quizList[currentQuiz].answerNumber)
+                {
+                    OnClick_CorrectReaction();
+                }
+                else
+                {
+                    OnClick_WrongReaction(index);
+                }
+            });
         }
     }
 
     public void OnClick_CorrectReaction()
+    {
+        SoundManager.instance.PlaySFX("Correct");
+        HintText.text = quizList[currentQuiz].correct_reaction;
+        nextButton.interactable = true;
+
+        foreach (var btn in choiceButtons)
+            btn.interactable = false;
+
+        // 정답 버튼 색상 변경
+        choiceButtons[quizList[currentQuiz].answerNumber].image.color = Color.green;
+    }
+
+    public void OnClick_WrongReaction(int index)
+    {
+        wrongTryCount++;
+
+        if (wrongTryCount == 1)
+        {
+            SoundManager.instance.PlaySFX("Click2");
+            HintText.text = quizList[currentQuiz].wrong_reaction;
+        }
+        else
+        {
+            SoundManager.instance.PlaySFX("Click2");
+            HintText.text = quizList[currentQuiz].wrong_reaction + "\n\n정답은: " +
+                            quizList[currentQuiz].choice[quizList[currentQuiz].answerNumber];
+
+            foreach (var btn in choiceButtons)
+                btn.interactable = false;
+
+            // 정답 버튼 강조
+            choiceButtons[quizList[currentQuiz].answerNumber].image.color = Color.green;
+
+            // 오답 선택된 버튼을 회색 등으로 변경 (선택사항)
+            choiceButtons[index].image.color = Color.gray;
+
+            nextButton.interactable = true;
+        }
+    }
+
+    /*public void SetQuestion(int currentQuiz)
+{
+    foreach (var btn in choiceButtons)
+    {
+        btn.onClick.RemoveAllListeners();
+    }
+
+    nextButton.interactable = false; //다음으로 가기 버튼 비활성화
+    QuestionText.text = quizList[currentQuiz].question;
+    QuestionNumText.text = $"{currentQuiz + 1}/{quizList.Count}";
+    HintText.text = "";
+    //선택지 텍스트 입력
+    for (int i = 0; i < choiceButtons.Length; i++)
+    {
+        choiceButtons[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text
+            = quizList[currentQuiz].choice[i];
+        if (i.Equals(quizList[currentQuiz].answerNumber))
+        {
+            choiceButtons[i].onClick.AddListener(OnClick_CorrectReaction);
+        }
+        else
+        {
+            choiceButtons[i].onClick.AddListener(OnClick_WrongReaction);
+        }
+    }
+}*/
+    /*public void OnClick_CorrectReaction()
     {
         SoundManager.instance.PlaySFX("Correct");
         HintText.text = quizList[currentQuiz].correct_reaction;
@@ -234,21 +318,7 @@ public class QuizSettingController : MonoBehaviour
     {
         SoundManager.instance.PlaySFX("Click2");
         HintText.text = quizList[currentQuiz].wrong_reaction;
-    }
-
-    public void OnClick_QuizStart()
-    {
-        QuizStart.SetActive(false);
-        QuizGroup.SetActive(true);
-        SetQuestion(currentQuiz);
-    }
-
-    public void OnClick_QuizEndClose()
-    {
-        QuizEnd.SetActive(false);
-        QuizStart.SetActive(true);
-        currentQuiz = 0;
-    }
+    }*/
 
     public void OnClick_NextButton()
     {
@@ -269,21 +339,22 @@ public class QuizSettingController : MonoBehaviour
             SetQuestion(currentQuiz);
         }
     }
+
     IEnumerator QuizEndIcon_RotateObject()
     {
         float currentSpeed = startSpeed;
-        
+
         // 무한 루프처럼 돌다가 속도가 0이 되면 멈춤
         while (currentSpeed > 0f)
         {
             quizEndIcon.Rotate(Vector3.up, currentSpeed * Time.deltaTime);
-        
+
             // 속도를 서서히 줄이기
             currentSpeed -= deceleration * Time.deltaTime;
-        
+
             yield return null;
         }
-        
+
         // 마지막에 각도를 딱 맞추고 싶다면 (가까운 0도로 스냅)
         Vector3 euler = quizEndIcon.eulerAngles;
         euler.y = Mathf.Round(euler.y / 45f) * 45f; // 45도 단위로 맞추기 (선택)

@@ -10,7 +10,7 @@ public class MassVolumeController : MonoBehaviour
     public Material[] waterMaterial; //0:물, 1:얼음
 
     [Header("UI 참조")] public TextMeshProUGUI infoText;
-    public TextMeshProUGUI weightText;
+   // public TextMeshProUGUI weightText;
     public Button meltButton;
     public Button boilButton;
     public Button compareButton;
@@ -72,7 +72,7 @@ public class MassVolumeController : MonoBehaviour
                 waterObject.GetComponent<Renderer>().material = waterMaterial[1];
                 waterObject.transform.localScale = initialScale;
                 infoText.text = "지금은 단단한 얼음 상태예요.";
-                weightText.text = $"{weight:F0} g";
+        
                 PopupSetCompareText();
                 // 얼음 상태에서는 "얼음 녹이기"만 활성화
                 meltButton.interactable = true;
@@ -83,7 +83,7 @@ public class MassVolumeController : MonoBehaviour
                 waterObject.GetComponent<Renderer>().material = waterMaterial[0];
                 AnimateScaleY(initialScale.y * 0.8f);
                 infoText.text = "얼음이 물로 변했어요!";
-                weightText.text = $"{weight:F0} g";
+
                 PopupSetCompareText();
                 // 물 상태에서는 "물 끓이기"만 활성화
                 boilButton.interactable = true;
@@ -92,7 +92,7 @@ public class MassVolumeController : MonoBehaviour
             case State.Vapor:
                 vaporEffect.SetActive(true);
                 infoText.text = "물이 수증기로 변했어요!";
-                weightText.text = $"{weight:F0} g";
+
                 PopupSetCompareText();
                 // 수증기 상태에서는 다음 버튼이 없으니 melt/boil은 비활성화
                 break;

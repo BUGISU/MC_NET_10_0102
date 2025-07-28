@@ -33,10 +33,11 @@ public class SettingManager : MonoBehaviour
         if (soundManager == null)
             soundManager = FindObjectOfType<SoundManager>();
 
+
         // 🔹 LeiaDisplay 초기값
         float savedDepth = PlayerPrefs.GetFloat("DepthFactor", leiaDisplay.DepthFactor);
         float savedLookAround = PlayerPrefs.GetFloat("LookAroundFactor", leiaDisplay.LookAroundFactor);
-        int saved3DMode = PlayerPrefs.GetInt("User3DMode", 0);
+        int saved3DMode = PlayerPrefs.GetInt("User3DMode", 1);
         
         leiaDisplay.DepthFactor = savedDepth;
         leiaDisplay.LookAroundFactor = savedLookAround;

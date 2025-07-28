@@ -1574,6 +1574,79 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1001 &553110825
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2465
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1525.675
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333188748717291226, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869882934217418939, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8869882934217418939, guid: c17429e2725f3fc41b49efb953398efe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c17429e2725f3fc41b49efb953398efe, type: 3}
 --- !u!1 &563730169
 GameObject:
   m_ObjectHideFlags: 0
@@ -3454,8 +3527,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quizList: []
-  QuizStart: {fileID: 0}
-  QuizGroup: {fileID: 0}
   QuizEnd: {fileID: 1581526911}
   quizEndIcon: {fileID: 1149169855}
   startSpeed: 1440
@@ -5377,3 +5448,4 @@ SceneRoots:
   - {fileID: 584356850}
   - {fileID: 1202728831}
   - {fileID: 609910533}
+  - {fileID: 553110825}
